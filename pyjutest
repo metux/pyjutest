@@ -28,23 +28,23 @@ oparser.add_option("--name", dest="uname", default=None)
 (opt,args) = oparser.parse_args(sys.argv)
 
 if opt.version:
-	print("pyjutest v%s" % pyju_version)
-	sys.exit(0)
+    print("pyjutest v%s" % pyju_version)
+    sys.exit(0)
 
 if len(args) != 2:
-	oparser.print_help()
-	sys.exit(-1)
+    oparser.print_help()
+    sys.exit(-1)
 
 cmd = args[1]
 
 if not opt.uname:
-	opt.uname = cmd
+    opt.uname = cmd
 
 if os.path.exists('pyjutest.dat'):
-	with open('pyjutest.dat', 'rb') as dat:
-		tss = load(dat)
+    with open('pyjutest.dat', 'rb') as dat:
+        tss = load(dat)
 else:
-	tss = [TestSuite("suite", None)]
+    tss = [TestSuite("suite", None)]
 
 start = time.time()
 
@@ -84,12 +84,12 @@ duration = time.time() - start
 tc = TestCase(opt.uname, opt.uclass, duration, out, err)
 
 if p.returncode:
-	tc.add_failure_info(err, "return: %d" % p.returncode)
+    tc.add_failure_info(err, "return: %d" % p.returncode)
 
 tss[0].test_cases.append(tc)
 
 with open('pyjutest.dat', 'wb') as dat:
-	dump(tss, dat)
+    dump(tss, dat)
 
 with open('pyjutest.xml', 'w') as xml:
-	TestSuite.to_file(xml, tss, prettyprint=True)
+    TestSuite.to_file(xml, tss, prettyprint=True)
