@@ -1,0 +1,7 @@
+Files: *
+Copyright: 2017 Manuel Traut <manut@mecka.net>
+License: GPL-3
+ SPDX-License-Identifier: GPL-3.0
+ On Debian systems, the full text of the GNU General Public
+ License version 3 can be found in the file
+ `/usr/share/common-licenses/GPL-3'.

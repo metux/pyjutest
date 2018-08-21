@@ -1,0 +1,95 @@
+#!/usr/bin/env python3
+#
+# (C) 2017 - Manuel Traut <manut@mecka.net>
+#
+# SPDX-License-Identifier: GPL-3.0
+#
+# pyjutest - junit xml generator
+
+from __future__ import print_function
+
+from junit_xml import TestSuite, TestCase
+from pickle import dump, load
+from subprocess import Popen, PIPE, STDOUT
+from optparse import OptionParser
+
+import os
+import select
+import sys
+import time
+
+from pyju.version import pyju_version
+
+oparser = OptionParser(usage="usage: %prog [options] \'mycmd param1 param2\'")
+oparser.add_option("--version", dest="version", action="store_true", default=False)
+oparser.add_option("--class", dest="uclass", default="sh")
+oparser.add_option("--name", dest="uname", default=None)
+
+(opt,args) = oparser.parse_args(sys.argv)
+
+if opt.version:
+	print("pyjutest v%s" % pyju_version)
+	sys.exit(0)
+
+if len(args) != 2:
+	oparser.print_help()
+	sys.exit(-1)
+
+cmd = args[1]
+
+if not opt.uname:
+	opt.uname = cmd
+
+if os.path.exists('pyjutest.dat'):
+	with open('pyjutest.dat', 'rb') as dat:
+		tss = load(dat)
+else:
+	tss = [TestSuite("suite", None)]
+
+start = time.time()
+
+p = Popen(cmd, shell=True, stdout=PIPE, stderr=PIPE)
+fds = [ p.stdout, p.stderr ]
+
+out = ""
+err = ""
+
+while True:
+    readable, writable, exceptional = select.select(fds, [], [])
+    done = 0
+
+    if p.stderr in readable:
+        l = p.stderr.readline().decode('utf-8')
+        if len(l):
+            print(l[:-1], file=sys.stderr)
+            sys.stderr.flush()
+            err += l
+        else:
+            done = 1
+
+    if p.stdout in readable:
+        l = p.stdout.readline().decode('utf-8')
+        if len(l):
+            print(l[:-1])
+            sys.stdout.flush()
+            out += l
+        else:
+            if done:
+                break
+
+p.wait()
+
+duration = time.time() - start
+
+tc = TestCase(opt.uname, opt.uclass, duration, out, err)
+
+if p.returncode:
+	tc.add_failure_info(err, "return: %d" % p.returncode)
+
+tss[0].test_cases.append(tc)
+
+with open('pyjutest.dat', 'wb') as dat:
+	dump(tss, dat)
+
+with open('pyjutest.xml', 'w') as xml:
+	TestSuite.to_file(xml, tss, prettyprint=True)

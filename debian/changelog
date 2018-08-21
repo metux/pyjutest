@@ -1,0 +1,49 @@
+pyjutest (1.6+stretch251) stretch; urgency=medium
+
+  * jenkins-pyjutest-master-25
+
+ -- Manuel Traut <jenkins@servus.tec.linutronix.de>  Wed, 10 Jan 2018 11:05:59 +0000
+
+pyjutest (1.6) unstable; urgency=medium
+
+  * add copyright file
+  * set arch to all instead of any
+
+ -- Manuel Traut <manut@linutronix.de>  Wed, 10 Jan 2018 12:04:28 +0100
+
+pyjutest (1.5) unstable; urgency=medium
+
+  * continious stderr/stdout output
+  * add a --name parameter
+
+ -- Manuel Traut <manut@linutronix.de>  Thu, 14 Dec 2017 09:46:53 +0100
+
+pyjutest (1.4) unstable; urgency=medium
+
+  * add parameter parsing and a --class parameter
+
+ -- Manuel Traut <manut@linutronix.de>  Mon, 04 Dec 2017 15:57:35 +0100
+
+pyjutest (1.3) unstable; urgency=medium
+
+  * reprint stdout and stderr of the original command
+
+ -- Manuel Traut <manut@linutronix.de>  Wed, 22 Nov 2017 13:04:48 +0100
+
+pyjutest (1.2) unstable; urgency=medium
+
+  * time measurement feature added
+
+ -- Manuel Traut <manut@linutronix.de>  Wed, 20 Sep 2017 16:31:13 +0200
+
+pyjutest (1.1) unstable; urgency=medium
+
+  * make it runable within python3 interpreter
+
+ -- Manuel Traut <manut@linutronix.de>  Wed, 20 Sep 2017 08:28:04 +0200
+
+pyjutest (1.0) unstable; urgency=medium
+
+  * Initial Release.
+
+ -- Manuel Traut <manut@linutronix.de>  Tue, 19 Sep 2017 08:27:01 +0200
